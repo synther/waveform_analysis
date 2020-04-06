@@ -90,6 +90,7 @@ def analyze_channels(filename, function):
     """
     signal, sample_rate, channels = load(filename)
     print('Analyzing "' + filename + '"...')
+    print('Analyzing {} file ({} channels)'.format(filename, channels))
 
     if channels == 1:
         # Monaural
@@ -109,6 +110,8 @@ def analyze_channels(filename, function):
         for ch_no, channel in enumerate(signal.transpose()):
             print('-- Channel %d --' % (ch_no + 1))
             function(channel, sample_rate)
+
+    print('Analysis done')
 
 
 # Copied from matplotlib.mlab:

@@ -55,6 +55,7 @@ def THDN(signal, fs, weight=None):
     TODO: Or report all of the above in a dictionary?
 
     """
+
     # Get rid of DC and window the signal
     signal = np.asarray(signal) + 0.0  # Float-like array
     # TODO: Do this in the frequency domain, and take any skirts with it?
@@ -98,6 +99,8 @@ def THDN(signal, fs, weight=None):
     else:
         raise ValueError('Weighting not understood')
 
+    print('return...')
+
     # TODO: Return a dict or list of frequency, THD+N?
     return rms_flat(noise) / total_rms
 
@@ -128,8 +131,9 @@ def THD(signal, fs):
     i = argmax(abs(f))
     true_i = parabolic(log(abs(f)), i)[0]
     print('Frequency: %f Hz' % (fs * (true_i / len(windowed))))
-
     print('fundamental amplitude: %.3f' % abs(f[i]))
+
+    harmonics_num = 15
 
     # Find the values for the first 15 harmonics.  Includes harmonic peaks
     # only, by definition
@@ -137,9 +141,9 @@ def THD(signal, fs):
     # was perfectly estimated.
     # Instead of limited to 15, figure out how many fit based on f0 and
     # sampling rate and report this "4 harmonics" and list the strength of each
-    for x in range(2, 15):
+    for x in range(2, harmonics_num):
         print('%.3f' % abs(f[i * x]), end=' ')
 
-    THD = sum([abs(f[i*x]) for x in range(2, 15)]) / abs(f[i])
-    print('\nTHD: %f%%' % (THD * 100))
+    THD = sum([abs(f[i*x]) for x in range(2, harmonics_num)]) / abs(f[i])
+    print('\nTHD (up to %d harmonic): %f%%' % (harmonics_num, (THD * 100)))
     return
